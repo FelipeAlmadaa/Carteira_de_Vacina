@@ -5,7 +5,7 @@ export const UserVaccine = sequelize.define('UserVaccine', {
   aplicada: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
-    defaultValue: true // <- isso define que o padrão é true
+    defaultValue: true 
   },
   dataAplicacao: {
     type: DataTypes.DATEONLY,

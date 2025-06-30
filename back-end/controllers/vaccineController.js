@@ -47,6 +47,7 @@ export const getUserVaccines = async (req, res) => {
     const user = await User.findByPk(userId, {
       include: {
         model: Vaccine,
+        attributes: ['nome', 'codigo', 'descricao'],  // esses campos aqui são essenciais
         through: {
           attributes: ['aplicada', 'dataAplicacao']
         }
@@ -59,6 +60,7 @@ export const getUserVaccines = async (req, res) => {
 
     const vacinas = user.Vaccines.map(v => ({
       nome: v.nome,
+      codigo: v.codigo,
       descricao: v.descricao,
       aplicada: v.UserVaccine.aplicada,
       dataAplicacao: v.UserVaccine.dataAplicacao
