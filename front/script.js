@@ -60,7 +60,9 @@ document.addEventListener("DOMContentLoaded", function () {
             alert(data.error);
           } else {
             alert("Cadastro realizado com sucesso!");
-            window.location.href = "login.html";
+            setTimeout(() => {
+              window.location.href = "telaPrincipal.html";
+            }, 3200);
           }
         })
         .catch((error) => {
@@ -91,7 +93,9 @@ document.addEventListener("DOMContentLoaded", function () {
             // token recebido do backend
             localStorage.setItem("token", data.token); // salva no localStorage
             alert("Login realizado com sucesso!");
-            window.location.href = "telaPrincipal.html";
+            setTimeout(() => {
+              window.location.href = "telaPrincipal.html";
+            }, 3200);
           } else {
             alert(data.error || "Email ou senha incorretos.");
           }
@@ -129,8 +133,10 @@ document.addEventListener("DOMContentLoaded", function () {
           if (data.error) {
             alert(data.error);
           } else {
-            alert("Vacinas cadastradas com sucesso!");
-            window.location.href = "telaPrincipal.html";
+            alert("Vacinas registradas com sucesso!");
+            setTimeout(() => {
+              window.location.href = "telaPrincipal.html";
+            }, 3200);
           }
         })
         .catch((error) => {

@@ -2,52 +2,104 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Carteira de Vacinação</title>
     <link rel="stylesheet" href="/css/styles.css" />
+    <style>
+      /* Estilo básico para a barra de progresso */
+      .progress {
+        width: 100%;
+        background: #eee;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 1rem;
+      }
+      .progress-bar-inner {
+        height: 20px;
+        background: #4caf50;
+        width: 0%;
+        transition: width 0.4s ease;
+      }
+      .status-completa .dot {
+        background-color: green;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 5px;
+      }
+      .status-pendente .dot {
+        background-color: red;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 5px;
+      }
+      /* Para centralizar botões e demais ajustes, coloque no seu CSS */
+    </style>
   </head>
   <body>
     <div class="card">
-      <a href="cadastro.html" class="icon-add" title="Cadastrar nova vacina">Add</a>
+      <a href="cadastrarVacinas.html" class="icon-add" title="Cadastrar nova vacina">Add</a>
       <a href="telaPrincipal.html" class="icon-home" title="Voltar ao menu">Menu</a>
       <header>
         <div class="icon-shield"></div>
         <h1>Carteira de Vacinação</h1>
       </header>
+
       <div class="stats">
         <button class="stat selected" data-filter="all">
-          <div class="stat-icon" style="background: url('/front/img/image00.png') center/contain no-repeat;"></div>
+          <div
+            class="stat-icon"
+            style="background: url('/front/img/image00.png') center/contain no-repeat;"
+          ></div>
           <div class="stat-text">
             <span>Vacinas Registradas</span>
             <span class="count" id="count-all">0</span>
           </div>
         </button>
         <button class="stat" data-filter="applied">
-          <div class="stat-icon" style="background: url('/front/img/image01.png') center/contain no-repeat;"></div>
+          <div
+            class="stat-icon"
+            style="background: url('/front/img/image01.png') center/contain no-repeat;"
+          ></div>
           <div class="stat-text">
             <span>Doses Aplicadas</span>
             <span class="count" id="count-applied">0</span>
           </div>
         </button>
         <button class="stat" data-filter="remaining">
-          <div class="stat-icon" style="background: url('/front/img/image02.png') center/contain no-repeat;"></div>
+          <div
+            class="stat-icon"
+            style="background: url('/front/img/image02.png') center/contain no-repeat;"
+          ></div>
           <div class="stat-text">
             <span>Restantes por Aplicar</span>
             <span class="count" id="count-remaining">0</span>
           </div>
         </button>
         <button class="stat" data-filter="next">
-          <div class="stat-icon" style="background: url('/front/img/image03.png') center/contain no-repeat;"></div>
+          <div
+            class="stat-icon"
+            style="background: url('/front/img/image03.png') center/contain no-repeat;"
+          ></div>
           <div class="stat-text">
             <span>Próxima Agendada</span>
             <span class="count" id="count-next">0</span>
           </div>
         </button>
       </div>
+
       <div class="progress">
-        <div class="progress-label">Processo: <span id="progress-percentage">0%</span> completo</div>
-        <div class="progress-bar"><div class="progress-bar-inner" id="progress-bar"></div></div>
+        <div class="progress-label">
+          Processo: <span id="progress-percentage">0%</span> completo
+        </div>
+        <div class="progress-bar">
+          <div class="progress-bar-inner" id="progress-bar"></div>
+        </div>
       </div>
+
       <div class="table-container">
         <table>
           <thead>
@@ -57,14 +109,21 @@
         </table>
       </div>
     </div>
+
     <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        await carregarVacinas();
+      });
+
       function gerarCabecalhos(vacinas) {
         const headerRow = document.getElementById("table-headers");
         if (!headerRow) return;
         headerRow.innerHTML = "";
         if (!vacinas || vacinas.length === 0) return;
         const allKeys = new Set();
-        vacinas.forEach(vacina => Object.keys(vacina).forEach(key => allKeys.add(key)));
+        vacinas.forEach((vacina) =>
+          Object.keys(vacina).forEach((key) => allKeys.add(key))
+        );
         allKeys.forEach((key) => {
           const th = document.createElement("th");
           th.textContent = key.charAt(0).toUpperCase() + key.slice(1);
@@ -76,13 +135,16 @@
           headerRow.appendChild(th);
         }
       }
+
       function atualizarTabelaVacinas(vacinas) {
         gerarCabecalhos(vacinas);
         const tbody = document.getElementById("vacina-table");
         if (!tbody) return;
         tbody.innerHTML = "";
         const headerRow = document.getElementById("table-headers");
-        const colunas = Array.from(headerRow.children).map(th => th.textContent.toLowerCase());
+        const colunas = Array.from(headerRow.children).map((th) =>
+          th.textContent.toLowerCase()
+        );
         vacinas.forEach((vacina) => {
           const tr = document.createElement("tr");
           tr.dataset.status = vacina.aplicada ? "complete" : "pending";
@@ -103,7 +165,9 @@
           if ("aplicada" in vacina) {
             const td = document.createElement("td");
             td.innerHTML = `
-              <div class="status ${vacina.aplicada ? "status-completa" : "status-pendente"}">
+              <div class="status ${
+                vacina.aplicada ? "status-completa" : "status-pendente"
+              }">
                 <div class="dot"></div>
                 <span>${vacina.aplicada ? "Completa" : "Pendente"}</span>
               </div>
@@ -112,39 +176,56 @@
           }
           tbody.appendChild(tr);
         });
-        atualizarContadores(vacinas);
-        atualizarProgresso(vacinas);
+        atualizarContadoresEVacinas(vacinas);
       }
-      function atualizarContadores(vacinas) {
-        const TOTAL_VACINAS_POR_DEPENDENTE = 10; // ajuste conforme a lógica do sistema
-        const aplicadas = vacinas.filter(vacina => vacina.aplicada).length;
-        const restantes = Math.max(TOTAL_VACINAS_POR_DEPENDENTE - aplicadas, 0);
 
-        document.getElementById("count-all").textContent = vacinas.length;
+      function atualizarContadoresEVacinas(vacinas) {
+        const TOTAL_VACINAS_POR_DEPENDENTE = 10; // ajuste conforme regra do sistema
+
+        const total = vacinas.length;
+        const aplicadas = vacinas.filter((vacina) => vacina.aplicada).length;
+        const restantes = Math.max(TOTAL_VACINAS_POR_DEPENDENTE - aplicadas, 0);
+        const proximas = vacinas.filter((vacina) => vacina.proximaDose).length;
+
+        const progresso = (aplicadas / TOTAL_VACINAS_POR_DEPENDENTE) * 100;
+        const progressoLimitado = Math.min(progresso, 100);
+
+        document.getElementById("count-all").textContent = total;
         document.getElementById("count-applied").textContent = aplicadas;
         document.getElementById("count-remaining").textContent = restantes;
-        document.getElementById("count-next").textContent = vacinas.filter(vacina => vacina.proximaDose).length;
+        document.getElementById("count-next").textContent = proximas;
+
+        document.getElementById("progress-percentage").textContent =
+          Math.round(progressoLimitado) + "%";
+
+        const progressBarInner = document.querySelector(".progress-bar-inner");
+        if (progressBarInner) {
+          progressBarInner.style.width = progressoLimitado + "%";
+        } else {
+          const progressBar = document.getElementById("progress-bar");
+          if (progressBar) {
+            progressBar.style.width = progressoLimitado + "%";
+          }
+        }
       }
-      function atualizarProgresso(vacinas) {
-        const totalVacinas = vacinas.length;
-        const aplicadas = vacinas.filter(vacina => vacina.aplicada).length;
-        const progresso = totalVacinas ? (aplicadas / totalVacinas) * 100 : 0;
-        document.getElementById("progress-percentage").textContent = `${Math.round(progresso)}%`;
-        document.getElementById("progress-bar").style.width = `${progresso}%`;
-      }
+
       async function carregarVacinas() {
         try {
           const token = localStorage.getItem("token");
           if (!token) {
             alert("Usuário não autenticado!");
+            window.location.href = "login.html";
             return;
           }
-          const response = await fetch("https://carteira-de-vacina.onrender.com/api/vacinas", {
-            headers: {
-              Authorization: "Bearer " + token,
-              "Content-Type": "application/json",
-            },
-          });
+          const response = await fetch(
+            "https://carteira-de-vacina.onrender.com/api/vacinas",
+            {
+              headers: {
+                Authorization: "Bearer " + token,
+                "Content-Type": "application/json",
+              },
+            }
+          );
           if (!response.ok) {
             throw new Error("Erro ao buscar vacinas");
           }
@@ -153,9 +234,12 @@
         } catch (error) {
           console.error(error);
           alert("Não foi possível carregar as vacinas.");
+          window.location.href = "login.html";
         }
       }
-      window.addEventListener("DOMContentLoaded", carregarVacinas);
     </script>
+     <script src="/front/modal.js"></script>
+     
   </body>
+ 
 </html>

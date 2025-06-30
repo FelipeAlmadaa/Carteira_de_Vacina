@@ -1,8 +1,10 @@
 async function fetchRegisteredVaccines() {
   const token = localStorage.getItem("token");
   if (!token) {
-    alert("Você precisa fazer login para ver suas vacinas.");
-    window.location.href = "login.html";
+    alert("Voce precisa fazer login para ver as vacinas cadastradas.");
+    setTimeout(() => {
+      window.location.href = "telaPrincipal.html";
+    }, 3200);
     return [];
   }
 
@@ -97,8 +99,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      alert("Você precisa fazer login para registrar vacinas.");
-      window.location.href = "login.html";
+      alert("Voce precisa fazer login para registrar vacinas.");
+      setTimeout(() => {
+        window.location.href = "telaPrincipal.html";
+      }, 3200);
       return;
     }
 
@@ -117,7 +121,9 @@ document.addEventListener("DOMContentLoaded", async function () {
           alert(data.error);
         } else {
           alert("Vacinas registradas com sucesso!");
-          window.location.href = "telaPrincipal.html";
+          setTimeout(() => {
+            window.location.href = "telaPrincipal.html";
+          }, 3200);
         }
       })
       .catch((error) => {

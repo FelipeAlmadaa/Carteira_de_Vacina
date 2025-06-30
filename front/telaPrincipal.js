@@ -31,7 +31,9 @@ document.addEventListener('DOMContentLoaded', function () {
     })
     .catch(error => {
         console.error("Erro ao buscar dados do usuário:", error);
-        alert("Erro ao carregar informações. Redirecionando para o login...");
-        window.location.href = 'login.html';
+        alert("Erro ao carregar dados do usuário. Por favor, tente novamente mais tarde.");
+        setTimeout(() => {
+        window.location.href = "telaPrincipal.html";
+        }, 3200);
     });
 

@@ -86,8 +86,10 @@ async function carregarVacinas() {
   try {
     const token = localStorage.getItem("token");
     if (!token) {
-      alert("Usuário não autenticado!");
-      window.location.href = "login.html";
+      alert("Usuario não autenticado. Redirecionando para a tela principal.");
+      setTimeout(() => {
+        window.location.href = "telaPrincipal.html";
+      }, 3200);
       return;
     }
     const response = await fetch("https://carteira-de-vacina.onrender.com/api/vacinas", {
@@ -103,7 +105,9 @@ async function carregarVacinas() {
     atualizarTabelaVacinas(vacinas);
   } catch (error) {
     console.error(error);
-    alert("Não foi possível carregar as vacinas.");
-    window.location.href = "login.html";
+    alert("Não foi possível carregar as vacinas. Por favor, tente novamente mais tarde.");
+    setTimeout(() => {
+      window.location.href = "telaPrincipal.html";
+    }, 3200);
   }
 }
