@@ -1,16 +1,26 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
+  // Buscar vacinas registradas do usuário
+  const registeredVaccines = await fetchRegisteredVaccines();
+
+  // Selecionar os botões
   const filterButtons = document.querySelectorAll(".filter-button");
   const vaccineSections = document.querySelectorAll(".vaccine-section");
-  const confirmRegisterButton = document.getElementById(
-    "confirmRegisterButton"
-  );
-  const registerVaccineButtons = document.querySelectorAll(
-    ".register-vaccine-button"
-  );
+  const confirmRegisterButton = document.getElementById("confirmRegisterButton");
+  const registerVaccineButtons = document.querySelectorAll(".register-vaccine-button");
 
   const selectedVaccines = new Set();
 
-  // Mostra a seção "18+" por padrão
+  // Desabilitar botões de vacinas já registradas
+  registerVaccineButtons.forEach((button) => {
+    const vaccineId = button.dataset.vaccineId;
+    if (registeredVaccines.includes(vaccineId)) {
+      button.disabled = true;
+      button.textContent = "Vacina Registrada";
+      button.classList.add("registered");
+    }
+  });
+
+  // Mostrar a seção "18+" por padrão
   showVaccineSection("18-plus");
 
   function showVaccineSection(ageGroupSuffix) {
@@ -43,21 +53,21 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Evento dos filtros de idade
+  // Eventos de filtro de idade
   filterButtons.forEach((button) => {
     button.addEventListener("click", function () {
       showVaccineSection(this.dataset.ageGroup);
     });
   });
 
-  // Clique em "Registrar Vacina"
+  // Eventos dos botões de registrar vacina
   registerVaccineButtons.forEach((button) => {
     button.addEventListener("click", function () {
       toggleVaccineSelection(this);
     });
   });
 
-  // Clique em "Confirmar Registro"
+  // Evento do botão confirmar registro
   confirmRegisterButton.addEventListener("click", function () {
     if (selectedVaccines.size === 0) {
       alert("Selecione pelo menos uma vacina.");
@@ -65,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const vacinas = Array.from(selectedVaccines);
-    const token = localStorage.getItem("token"); // PEGA O TOKEN DO LOCALSTORAGE
+    const token = localStorage.getItem("token");
 
     if (!token) {
       alert("Você precisa fazer login para registrar vacinas.");
@@ -77,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // ENVIA O TOKEN AQUI
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ vacinas }),
       credentials: "include",
@@ -97,3 +107,30 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   });
 });
+
+// Função que busca vacinas registradas (precisa estar no mesmo arquivo ou importada)
+async function fetchRegisteredVaccines() {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Você precisa fazer login para ver suas vacinas.");
+    window.location.href = "login.html";
+    return [];
+  }
+
+  try {
+    const response = await fetch("https://carteira-de-vacina.onrender.com/api/vacinas", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await response.json();
+
+    // Retorna só os códigos das vacinas aplicadas
+    return data.filter(v => v.aplicada).map(v => v.codigo);
+  } catch (error) {
+    console.error("Erro ao buscar vacinas cadastradas:", error);
+    alert("Erro ao buscar vacinas cadastradas.");
+    return [];
+  }
+}

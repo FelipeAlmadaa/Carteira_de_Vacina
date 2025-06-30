@@ -62,9 +62,15 @@ function atualizarTabelaVacinas(vacinas) {
 }
 
 function atualizarContadores(vacinas) {
-  document.getElementById("count-all").textContent = vacinas.length;
-  document.getElementById("count-applied").textContent = vacinas.filter(vacina => vacina.aplicada).length;
-  document.getElementById("count-pending").textContent = vacinas.filter(vacina => !vacina.aplicada).length;
+  const TOTAL_VACINAS_POR_DEPENDENTE = 10; // ou outro valor esperado
+
+  const total = vacinas.length;
+  const aplicadas = vacinas.filter(vacina => vacina.aplicada).length;
+  const restantes = Math.max(TOTAL_VACINAS_POR_DEPENDENTE - aplicadas, 0);
+
+  document.getElementById("count-all").textContent = total;
+  document.getElementById("count-applied").textContent = aplicadas;
+  document.getElementById("count-remaining").textContent = restantes;
   document.getElementById("count-next").textContent = vacinas.filter(vacina => vacina.proximaDose).length;
 }
 

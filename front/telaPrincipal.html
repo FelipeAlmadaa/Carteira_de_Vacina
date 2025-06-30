@@ -28,8 +28,8 @@
 
         <!-- Doses pendentes -->
         <div class="dashboard-card red-border">
-          <h3 class="header-red">Pendentes</h3>
-          <p class="card-number red" id="count-pending">0</p>
+          <h3 class="header-red">Pendentes/Futuro</h3>
+          <p class="card-number red" id="count-remaining" id="count-pending">0</p>
         </div>
 
         <!-- Botões -->
@@ -86,7 +86,12 @@
 
           document.getElementById("count-all").textContent = vacinas.length;
           document.getElementById("count-applied").textContent = vacinas.filter(v => v.aplicada).length;
-          document.getElementById("count-pending").textContent = vacinas.filter(v => !v.aplicada).length;
+          const TOTAL_VACINAS_POR_DEPENDENTE = 9;
+          const aplicadas = vacinas.filter(v => v.aplicada).length;
+          const restantes = TOTAL_VACINAS_POR_DEPENDENTE - aplicadas;
+
+          document.getElementById("count-applied").textContent = aplicadas;
+          document.getElementById("count-remaining").textContent = Math.max(restantes, 0);
           document.getElementById("count-next").textContent = vacinas.filter(v => v.proximaDose).length;
 
         } catch (err) {
