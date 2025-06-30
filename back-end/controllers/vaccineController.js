@@ -4,7 +4,7 @@ import { Vaccine } from '../models/Vaccine.js';
 
 export const registerVaccines = async (req, res) => {
   try {
-    const userId = req.user.id; // Assumindo que verificarToken já colocou o user no req
+    const userId = req.user.id; 
     const { vacinas } = req.body; // Array de códigos das vacinas, ex: ['triplice20', 'dtpa18']
 
     if (!vacinas || !Array.isArray(vacinas) || vacinas.length === 0) {
@@ -29,7 +29,9 @@ export const registerVaccines = async (req, res) => {
     // Adiciona as vacinas ao usuário
     // Usando "addVaccines" gerado pelo belongsToMany (plural: addVaccines)
     // Poderia usar também setVaccines para substituir, ou addVaccine para uma só
-    await user.addVaccines(vaccinesFound);
+    for (const vaccine of vaccinesFound) {
+      await user.addVaccine(vaccine, { through: { aplicada: true } });
+    }
 
     return res.json({ message: 'Vacinas registradas com sucesso!' });
   } catch (error) {

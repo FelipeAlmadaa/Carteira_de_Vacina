@@ -4,7 +4,8 @@ import { sequelize } from '../config/db.js';
 export const UserVaccine = sequelize.define('UserVaccine', {
   aplicada: {
     type: DataTypes.BOOLEAN,
-    defaultValue: false
+    allowNull: false,
+    defaultValue: true // <- isso define que o padrão é true
   },
   dataAplicacao: {
     type: DataTypes.DATEONLY,
