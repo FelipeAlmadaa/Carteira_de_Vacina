@@ -12,6 +12,10 @@
       "dest": "back-end/index.js"
     },
     {
+      "src": "/(.*\\.(css|js|html|png|jpg|jpeg|gif|svg|ico|txt))$",
+      "dest": "front/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "front/index.html"
     }
