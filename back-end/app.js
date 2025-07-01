@@ -9,9 +9,10 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-  origin: 'http://127.0.0.1:5500', // ou '*' em produção se necessário
+  origin: ['http://127.0.0.1:5500', 'https://carteira-de-vacina.vercel.app'],
   credentials: true
 }));
+
 
 app.use(express.json());
 
