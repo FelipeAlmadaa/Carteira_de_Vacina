@@ -10,7 +10,8 @@ import './models/UserVaccine.js';
 import './models/associations.js';
 dotenv.config();
 
-const app = express();
+const express = require('express')
+const app = express()
 
 // ✅ Configurar CORS e JSON
 app.use(cors({
@@ -30,8 +31,8 @@ async function startServer() {
     await sequelize.sync();
     console.log('🎉 Banco conectado');
 
-    const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => {
+    const port = process.env.PORT || 4000 
+    app.listen(port, () => {
       console.log(`🚀 Servidor rodando na porta ${PORT}`);
     });
   } catch (error) {
