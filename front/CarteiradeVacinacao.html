@@ -167,10 +167,10 @@
             const td = document.createElement("td");
             td.innerHTML = `
               <div class="status ${
-                vacina.aplicada ? "status-completa" : "status-pendente"
+                vacina.aplicada ? "status-Vacinado(a)" : "status-pendente"
               }">
                 <div class="dot"></div>
-                <span>${vacina.aplicada ? "Completa" : "Pendente"}</span>
+                <span>${vacina.aplicada ? "Vacinado(a)" : "Pendente"}</span>
               </div>
             `;
             tr.appendChild(td);
