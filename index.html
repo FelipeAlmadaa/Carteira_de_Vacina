@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Carteira de Vacinação</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <label for="loginEmail">Email ou CPF:</label>
+            <input type="text" id="loginEmail" required>
+
+            <label for="loginSenha">Senha:</label>
+            <input type="password" id="loginSenha" required>
+
+        
+            <button type="submit">Entrar</button>
+        </form>
+        <p>Não tem uma conta? <a href="cadastro.html">Cadastre-se</a></p>
+    </div>
+<div id="custom-alert" class="custom-alert hidden">
+  <div class="custom-alert-content" id="custom-alert-message"></div>
+</div>
+    <script src="script.js"></script>
+    <script src="/front/modal.js"></script>
+</body>
+</html>
