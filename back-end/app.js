@@ -22,6 +22,6 @@ app.use(express.json());
 app.use('/api', authRoutes);
 app.use('/api', vaccineRoutes);
 
-// Remove o listen(), pois a Vercel que vai cuidar disso
+
 
 export default app;
